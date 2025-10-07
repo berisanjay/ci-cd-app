@@ -1,45 +1,39 @@
 pipeline {
     agent any
-
     tools {
-        nodejs "NodeJS"
+        nodejs 'NodeJS 14.x'
     }
-
+    environment {
+        CI = 'true'
+    }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 bat 'npm install'
             }
         }
-
         stage('Run Tests') {
             steps {
                 bat 'npm test'
             }
         }
-
-        stage('Build') {
-            steps {
-                echo 'Build stage - optional'
-            }
-        }
-
         stage('Deploy') {
             steps {
-                echo 'Deploy stage - optional'
+                bat 'npm install -g pm2'
+                bat 'pm2 stop ci-cd-app || exit 0'
+                bat 'pm2 start app.js --name ci-cd-app'
+                bat 'pm2 save'
             }
         }
     }
-
     post {
         always {
-            echo 'Pipeline finished!'
-        }
-        success {
-            echo 'All tests passed ✅'
-        }
-        failure {
-            echo 'Pipeline failed ❌'
+            cleanWs()
         }
     }
 }
