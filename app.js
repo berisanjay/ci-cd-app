@@ -3,15 +3,14 @@ const app = express();
 
 app.use(express.json());
 
-// GET / route for test
 app.get("/", (req, res) => {
-  res.status(200).send("Hello World");
+  res.status(200).send("Welcome to CI-CD App");
 });
 
-// POST /create-account
 app.post("/create-account", (req, res) => {
   const { username, password } = req.body;
 
+  // Password regex
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   if (!username || !password) {
@@ -26,5 +25,4 @@ app.post("/create-account", (req, res) => {
 });
 
 app.listen(3000, () => console.log("http://localhost:3000"));
-
 module.exports = app;
