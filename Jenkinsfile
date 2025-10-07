@@ -1,10 +1,7 @@
 pipeline {
     agent any
     tools {
-        nodejs 'NodeJS 14.x'
-    }
-    environment {
-        CI = 'true'
+        nodejs 'NodeJS'  // <-- Match the exact name in Jenkins
     }
     stages {
         stage('Checkout') {
